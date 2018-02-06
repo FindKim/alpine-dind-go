@@ -2,9 +2,9 @@
 
 set -e
 
-# Base docker dind image
-if [ -z $DOCKER_IMAGE ]; then
-	DOCKER_IMAGE="docker:18.01-dind"
+# Base docker image
+if [ -z $DOCKER_VERSION ]; then
+	DOCKER_VERSION=18.01
 fi
 
 # Alpine version
@@ -17,10 +17,13 @@ if [ -z $GOLANG_VERSION ]; then
 	GOLANG_VERSION=1.9
 fi
 
-echo "Base docker image: $DOCKER_IMAGE \n\
+echo "Base docker image: $DOCKER_VERSION \n\
 Running with alpine $ALPINE_VERSION \n\
 Installing go version $GOLANG_VERSION"
+
+# Fetch Golang Dockerfile and use Docker as base image
 wget -O golang.zip https://github.com/docker-library/golang/archive/master.zip
 unzip golang.zip
 cp golang-master/$GOLANG_VERSION/alpine$ALPINE_VERSION/* .
-sed -i "s/FROM alpine:$ALPINE_VERSION/FROM $DOCKER_IMAGE/" Dockerfile
+sed -i "s/FROM alpine:$ALPINE_VERSION/FROM docker:$DOCKER_VERSION-git/" Dockerfile
+rm -r golang.zip golang-master/

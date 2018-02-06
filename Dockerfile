@@ -1,4 +1,4 @@
-FROM docker:18.01-dind
+FROM docker:18.01-git
 
 RUN apk add --no-cache ca-certificates
 
